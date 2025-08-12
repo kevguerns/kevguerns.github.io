@@ -71,6 +71,7 @@
         checkBox.onchange = () => {
           if (checkBox.checked) {
             fetch(API_URL, {
+              redirect: "follow",
               method: "POST",
               body: JSON.stringify({ ticket_number: guest.ticket_number }),
               headers: { "Content-Type": "text/plain;charset=utf-8" }
