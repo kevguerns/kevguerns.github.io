@@ -12,7 +12,7 @@
   </style>
 </head>
 <body>
-  <h1>FAA Pinaghalong Pamana Check-in v0.4</h1>
+  <h1>FAA Pinaghalong Pamana Check-in v0.5</h1>
   <div id="reader" style="width: 500px;"></div>
 
   <div id="debug"></div>
@@ -55,7 +55,7 @@
         const statusEl = document.getElementById("checked-status");
         const checkInBtn = document.getElementById("check-in-btn");
 
-        if (guest.checked_in === "Yes") {
+        if (guest.checked_in === true) {
           statusEl.textContent = "Yes";
           statusEl.className = "checked";
           checkInBtn.disabled = true;
