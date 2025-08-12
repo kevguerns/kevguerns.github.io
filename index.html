@@ -12,7 +12,7 @@
   </style>
 </head>
 <body>
-  <h1>FAA Pinaghalong Pamana Check-in v0.2</h1>
+  <h1>FAA Pinaghalong Pamana Check-in v0.3</h1>
   <div id="reader" style="width: 500px;"></div>
 
   <div id="debug"></div>
@@ -70,11 +70,9 @@
         // Checkbox handler
         checkBox.onchange = () => {
           if (checkBox.checked) {
-            fetch(API_URL, {
-              method: "POST",
-              body: JSON.stringify({ ticket_number: guest.ticket_number }),
-              headers: { "Content-Type": "text/plain;charset=utf-8" }
-            })
+            const newURL = API_URL + "?update=True&ticket_number=" + guest.ticket_number;
+            console.log(newURL);
+            fetch(newURL)
             .then(() => {
               // Refresh data and update display immediately
               loadData(() => showGuestInfo(guest.ticket_number));
