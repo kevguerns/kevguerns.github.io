@@ -62,7 +62,7 @@
               redirect: "follow",
               method: "POST",
               body: JSON.stringify({ ticket_number: guest.ticket_number }),
-              headers: { "Content-Type": "application/json" }
+              headers: { "Content-Type": "text/plain;charset=utf-8" }
             })
             .then(() => {
               document.getElementById("checked-status").textContent = "Yes";
