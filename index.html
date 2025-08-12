@@ -12,7 +12,7 @@
   </style>
 </head>
 <body>
-  <h1>FAA Pinaghalong Pamana Check-in v0.3</h1>
+  <h1>FAA Pinaghalong Pamana Check-in v0.4</h1>
   <div id="reader" style="width: 500px;"></div>
 
   <div id="debug"></div>
@@ -77,6 +77,7 @@
               // Refresh data and update display immediately
               loadData(() => showGuestInfo(guest.ticket_number));
             })
+            .then(alert(guest.ticket_number))
             .catch(err => console.error("Error checking in:", err));
           }
         };
