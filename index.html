@@ -23,9 +23,7 @@
     <p><strong>Paid:</strong> <span id="paid"></span></p>
     <p><strong>Checked In:</strong> <span id="checked-status"></span></p>
     <p>
-      <label>
-        <input type="checkbox" id="checked-in"> Mark as Checked In
-      </label>
+      <button id="check-in-btn">Mark as Checked In</button>
     </p>
   </div>
 
@@ -55,31 +53,28 @@
         document.getElementById("paid").textContent = guest.paid_bool;
 
         const statusEl = document.getElementById("checked-status");
-        const checkBox = document.getElementById("checked-in");
+        const checkInBtn = document.getElementById("check-in-btn");
 
         if (guest.checked_in === "Yes") {
           statusEl.textContent = "Yes";
           statusEl.className = "checked";
-          checkBox.checked = true;
+          checkInBtn.disabled = true;
+          checkInBtn.textContent = "Already Checked In";
         } else {
           statusEl.textContent = "No";
           statusEl.className = "not-checked";
-          checkBox.checked = false;
+          checkInBtn.disabled = false;
+          checkInBtn.textContent = "Check In Guest";
         }
 
         // Checkbox handler
-        checkBox.onchange = () => {
-          if (checkBox.checked) {
-            const newURL = API_URL + "?update=True&ticket_number=" + guest.ticket_number;
-            console.log(newURL);
-            fetch(newURL)
-            .then(() => {
-              // Refresh data and update display immediately
-              loadData(() => showGuestInfo(guest.ticket_number));
-            })
-            .then(alert(guest.ticket_number))
-            .catch(err => console.error("Error checking in:", err));
-          }
+        checkInBtn.onclick = () => {
+          const newURL = API_URL + "?update=True&ticket_number=" + guest.ticket_number;
+          console.log(newURL);
+          fetch(newURL)
+          .then(loadData())
+          .then(showGuestInfo(guest.ticket_number))
+          .catch(err => console.error("Error checking in:", err));
         };
       } else {
         alert("Ticket " + ticketNum + " not found.");
