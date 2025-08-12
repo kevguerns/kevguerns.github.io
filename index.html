@@ -44,7 +44,7 @@
 
     loadData();
 
-    document.getElementById("debug").textContent = ticketData;
+    document.getElementById("debug").textContent = ticketData.toString();
 
     function qrCodeSuccessCallback(decodedText) {
       const guest = ticketData.find(t => String(t.ticket_number) === decodedText.trim());
