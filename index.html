@@ -35,11 +35,13 @@
 
     // Load ticket data from Google Sheets
     function loadData() {
+      console.log("Loading data.")
       fetch(API_URL)
         .then(res => res.json())
         .then(data => {
           ticketData = data;
         });
+      console.log("Data loaded.")
     }
 
     loadData();
@@ -68,6 +70,7 @@
               document.getElementById("checked-status").textContent = "Yes";
               loadData(); // Refresh data
             });
+            console.log("POSTING.")
           }
         };
       } else {
