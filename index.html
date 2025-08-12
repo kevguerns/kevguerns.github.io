@@ -44,7 +44,7 @@
 
     loadData();
 
-    document.getElementById("debug").textContent = ticketData.toString();
+    console.log(ticketData);
 
     function qrCodeSuccessCallback(decodedText) {
       const guest = ticketData.find(t => String(t.ticket_number) === decodedText.trim());
@@ -72,7 +72,7 @@
           }
         };
       } else {
-        alert("Ticket " + decodedText + "not found.");
+        alert("Ticket " + decodedText + " not found.");
       }
     }
 
