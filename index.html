@@ -44,6 +44,7 @@
     }
 
     function showGuestInfo(ticketNum) {
+      loadData();
       const guest = ticketData.find(t => String(t.ticket_number) === String(ticketNum));
       if (guest) {
         currentTicket = guest.ticket_number;
@@ -71,6 +72,7 @@
         checkInBtn.onclick = () => {
           const newURL = API_URL + "?update=True&ticket_number=" + guest.ticket_number;
           console.log(newURL);
+          loadData();
           fetch(newURL)
           .then(loadData())
           .then(showGuestInfo(guest.ticket_number))
