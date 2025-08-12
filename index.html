@@ -14,6 +14,8 @@
 <body>
   <h1>FAA Pinaghalong Pamana Check-in v0.1</h1>
   <div id="reader" style="width: 500px;"></div>
+
+  <div id="debug"></div>
   
   <div id="guest-info" class="info-box hidden">
     <p><strong>Name:</strong> <span id="name"></span></p>
@@ -41,6 +43,8 @@
     }
 
     loadData();
+
+    document.getElementById("debug").textContent = ticketData;
 
     function qrCodeSuccessCallback(decodedText) {
       const guest = ticketData.find(t => String(t.ticket_number) === decodedText.trim());
