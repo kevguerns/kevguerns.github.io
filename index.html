@@ -12,7 +12,7 @@
   </style>
 </head>
 <body>
-  <h1>FAA Pinaghalong Pamana Check-in v0.1</h1>
+  <h1>FAA Pinaghalong Pamana Check-in v0.2</h1>
   <div id="reader" style="width: 500px;"></div>
 
   <div id="debug"></div>
@@ -43,8 +43,6 @@
     }
 
     loadData();
-
-    console.log(ticketData);
 
     function qrCodeSuccessCallback(decodedText) {
       const guest = ticketData.find(t => String(t.ticket_number) === decodedText.trim());
@@ -79,6 +77,8 @@
     const html5QrcodeScanner = new Html5QrcodeScanner(
       "reader", { fps: 10, qrbox: 250 });
     html5QrcodeScanner.render(qrCodeSuccessCallback);
+
+    console.log(ticketData);
   </script>
 </body>
 </html>
