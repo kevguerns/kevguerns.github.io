@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Event Check-In</title>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f5f5f5; }
+    .info-box { margin-top: 20px; padding: 15px; border-radius: 8px; background: #fff; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+    .hidden { display: none; }
+    #reader { margin: auto; }
+  </style>
+</head>
+<body>
+  <h1>QR Code Check-In</h1>
+  <div id="reader" style="width: 300px;"></div>
+  
+  <div id="guest-info" class="info-box hidden">
+    <p><strong>Name:</strong> <span id="name"></span></p>
+    <p><strong>Table:</strong> <span id="table"></span></p>
+    <p><strong>Paid:</strong> <span id="paid"></span></p>
+    <p><strong>Checked In:</strong> <span id="checked-status"></span></p>
+    <p>
+      <label>
+        <input type="checkbox" id="checked-in"> Mark as Checked In
+      </label>
+    </p>
+  </div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbxkRgjs1VtwPjtLVZmtFnTdSXYVLf8RuIRotRwws8SJ3KcYXiS2ahKUOoYtFIIi-6P9fg/exec"; // Replace with Apps Script Web App URL
+    let ticketData = [];
+
+    // Load ticket data from Google Sheets
+    function loadData() {
+      fetch(API_URL)
+        .then(res => res.json())
+        .then(data => {
+          ticketData = data;
+        });
+    }
+
+    loadData();
+
+    function qrCodeSuccessCallback(decodedText) {
+      const guest = ticketData.find(t => String(t.ticket_number) === decodedText.trim());
+      if (guest) {
+        document.getElementById("guest-info").classList.remove("hidden");
+        document.getElementById("name").textContent = guest.first_name + " " + guest.last_name;
+        document.getElementById("table").textContent = guest.table_number;
+        document.getElementById("paid").textContent = guest.paid_bool;
+        document.getElementById("checked-status").textContent = guest.checkin_bool;
+        
+        const checkBox = document.getElementById("checked-in");
+        checkBox.checked = (guest.checkin_bool === "Yes");
+        
+        checkBox.onchange = () => {
+          if (checkBox.checked) {
+            fetch(API_URL, {
+              method: "POST",
+              body: JSON.stringify({ ticket_number: guest.ticket_number }),
+              headers: { "Content-Type": "application/json" }
+            })
+            .then(() => {
+              document.getElementById("checked-status").textContent = "Yes";
+              loadData(); // Refresh data
+            });
+          }
+        };
+      } else {
+        alert("Ticket not found.");
+      }
+    }
+
+    const html5QrcodeScanner = new Html5QrcodeScanner(
+      "reader", { fps: 10, qrbox: 250 });
+    html5QrcodeScanner.render(qrCodeSuccessCallback);
+  </script>
+</body>
+</html>
