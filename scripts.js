@@ -5,66 +5,65 @@ let currentTicket = null;
 // Load ticket data from Google Sheets
 async function loadData() {
   const checkInBtn = document.getElementById("check-in-btn");
-
   checkInBtn.disabled = true;
   showBanner("Loading data", "banner");
-  html5QrcodeScanner.html5Qrcode.pause();
-  const res = await fetch(API_URL)
-    .then(res => res.json())
-    .then(data => {
-      ticketData = data;
-    });
+  await html5QrcodeScanner.html5Qrcode.pause();
+
+  const res = await fetch(API_URL);
+  ticketData = await res.json();
+
   showBanner("Data loaded.", "banner");
-  html5QrcodeScanner.html5Qrcode.resume();
+  await html5QrcodeScanner.html5Qrcode.resume();
   checkInBtn.disabled = false;
-  return res;
+
+  return ticketData;
 }
 
 async function showGuestInfo(ticketNum) {
-  loadData();
+  await loadData();
   const guest = ticketData.find(t => String(t.ticket_number) === String(ticketNum));
-  if (guest) {
-    currentTicket = guest.ticket_number;
-    document.getElementById("guest-info").classList.remove("hidden");
-    document.getElementById("name").textContent = guest.first_name + " " + guest.last_name;
-    document.getElementById("table").textContent = guest.table_num;
-    document.getElementById("paid").textContent = guest.paid_bool;
-
-    const statusEl = document.getElementById("checked-status");
-    const checkInBtn = document.getElementById("check-in-btn");
-
-    if (guest.checked_in === true) {
-      statusEl.textContent = "Yes";
-      statusEl.className = "checked";
-      checkInBtn.disabled = true;
-      checkInBtn.textContent = "Already Checked In";
-    } else {
-      statusEl.textContent = "No";
-      statusEl.className = "not-checked";
-      checkInBtn.disabled = false;
-      checkInBtn.textContent = "Check In Guest";
-    }
-
-    // Checkbox handler
-    checkInBtn.onclick = () => {
-      const newURL = API_URL + "?update=True&ticket_number=" + guest.ticket_number;
-      console.log(newURL);
-      fetch(newURL)
-      .then(() => {
-        showBanner("Ticket checked in!", "banner2");
-        showGuestInfo(guest.ticket_number);
-      })
-      .catch(err => console.error("Error checking in:", err));
-    };
-  } else {
+  if (!guest) {
     alert("Ticket " + ticketNum + " not found.");
+    return;
   }
-  res = await loadData();
-  return res;
+  
+  currentTicket = guest.ticket_number;
+  document.getElementById("guest-info").classList.remove("hidden");
+  document.getElementById("name").textContent = guest.first_name + " " + guest.last_name;
+  document.getElementById("table").textContent = guest.table_num;
+  document.getElementById("paid").textContent = guest.paid_bool;
+
+  const statusEl = document.getElementById("checked-status");
+  const checkInBtn = document.getElementById("check-in-btn");
+
+  if (guest.checked_in === true) {
+    statusEl.textContent = "Yes";
+    statusEl.className = "checked";
+    checkInBtn.disabled = true;
+    checkInBtn.textContent = "Already Checked In";
+  } else {
+    statusEl.textContent = "No";
+    statusEl.className = "not-checked";
+    checkInBtn.disabled = false;
+    checkInBtn.textContent = "Check In Guest";
+  }
+
+  checkInBtn.onclick = async () => {
+    const newURL = API_URL + "?update=True&ticket_number=" + guest.ticket_number;
+    try {
+      showBanner("Checking in ticket...", "banner");
+      await fetch(newURL);
+      showBanner("Ticket checked in!", "banner2");
+      await loadData();
+      await showGuestInfo(guest.ticket_number);
+    } catch (err) {
+      console.error("Error checking in:", err);
+    }
+  };
 }
 
 async function qrCodeSuccessCallback(decodedText) {
-  html5QrcodeScanner.html5Qrcode.pause();
+  await html5QrcodeScanner.html5Qrcode.pause();
 
   try {
     await showGuestInfo(decodedText.trim());
@@ -72,24 +71,10 @@ async function qrCodeSuccessCallback(decodedText) {
     console.error("Error during QR code processing:", err);
   }
 
-  html5QrcodeScanner.html5Qrcode.resume();
+  await html5QrcodeScanner.html5Qrcode.resume();
 }
 
-function showBanner(message = "Ticket is being checked in!", bannerId, duration = 3000) {
-  const banner = document.getElementById(bannerId);
-  banner.textContent = message;
-
-  banner.style.pointerEvents = "auto";
-  banner.style.opacity = "1";
-
-  setTimeout(() => {
-    banner.style.opacity = "0";
-    banner.style.pointerEvents = "none";
-  }, duration);
-}
-
-const html5QrcodeScanner = new Html5QrcodeScanner(
-  "reader", { fps: 10, qrbox: 250 });
+const html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
 html5QrcodeScanner.render(qrCodeSuccessCallback);
 
 loadData();
