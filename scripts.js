@@ -59,8 +59,12 @@ async function showGuestInfo(ticketNum) {
 
     const select = document.getElementById("names");
 
+    console.log("for names");
     for (name in Object.keys(names)) {
+      console.log(name);
       const newOption = document.createElement('option');
+      console.log("names[name]");
+      console.log(names[name]);
       newOption.value = names[name][0];
       newOption.text = name;
       select.appendChild(newOption);
