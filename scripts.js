@@ -7,13 +7,11 @@ async function loadData() {
   const checkInBtn = document.getElementById("check-in-btn");
   checkInBtn.disabled = true;
   showBanner("Loading data", "banner");
-  await html5QrcodeScanner.html5Qrcode.pause();
 
   const res = await fetch(API_URL);
   ticketData = await res.json();
 
   showBanner("Data loaded.", "banner");
-  await html5QrcodeScanner.html5Qrcode.resume();
   checkInBtn.disabled = false;
 
   return ticketData;
