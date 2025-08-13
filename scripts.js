@@ -91,17 +91,19 @@ async function showGuestInfo(ticketNum) {
       console.log("selectedValue");
       console.log(selectedValue);
 
+      let selectedArr = selectedValue.split(",");
+
       document.getElementById("name").textContent = event.target.text;
-      document.getElementById("table").textContent = selectedValue[1];
-      document.getElementById("paid").textContent = selectedValue[2];
-      document.getElementById("meal").textContent = selectedValue[3];
+      document.getElementById("table").textContent = selectedArr[1];
+      document.getElementById("paid").textContent = selectedArr[2];
+      document.getElementById("meal").textContent = selectedArr[3];
       statusEl.textContent = "No";
 
       checkInBtn.diabled = false;
       checkInBtn.textContent = "Check In Guest";
 
       checkInBtn.onclick = async () => {
-        const newURL = API_URL + "?update=False&ticket_number=" + guest.ticket_number + "&swap=" + selectedValue[0];
+        const newURL = API_URL + "?update=False&ticket_number=" + guest.ticket_number + "&swap=" + selectedArr[0];
         try {
           select.classList.add("hidden");
           showBanner("Checking in ticket...", "banner2");
