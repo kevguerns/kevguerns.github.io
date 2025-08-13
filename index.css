@@ -10,6 +10,8 @@ body {
     border-radius: 8px; 
     background: #ce8525; 
     box-shadow: 0 0 5px rgba(0,0,0,0.1); 
+    width: 50%;
+    opacity:  0.8;
 }
     
 .hidden { 
@@ -29,6 +31,13 @@ body {
 h1 {
     margin: auto;
     text-align: center;
+    padding-bottom: 10px;
+}
+
+strong {
+  font-family: "Libre Baskerville", serif;
+  font-weight: 400;
+  font-style: italic;
 }
 
 .banner {
