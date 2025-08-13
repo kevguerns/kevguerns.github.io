@@ -28,8 +28,12 @@ function getTicketsBySponsor(sponsorName) {
   for (ticket in tickets) {
     const name = ticket.first_name + " " + ticket.last_name;
     nameDict[name] = [ticket.ticket_number, ticket.table_num, ticket.paid_bool, ticket.meal_type];
+    console.log(name);
+    console.log(nameDict[name]);
   }
 
+  console.log("nameDict");
+  console.log(nameDict);
   return nameDict;
 }
 
