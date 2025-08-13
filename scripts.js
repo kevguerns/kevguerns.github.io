@@ -76,7 +76,7 @@ async function qrCodeSuccessCallback(decodedText) {
 }
 
 function showBanner(message = "Ticket is being checked in!", bannerId, duration = 3000) {
-  const banner = document.getElementById(banner);
+  const banner = document.getElementById(bannerId);
   banner.textContent = message;
 
   banner.style.pointerEvents = "auto";
