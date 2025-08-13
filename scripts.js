@@ -60,7 +60,7 @@ async function showGuestInfo(ticketNum) {
     const select = document.getElementById("names");
 
     console.log("for names");
-    print(Object.keys(names));
+    console.log(Object.keys(names));
     for (const name in Object.keys(names)) {
       console.log(name);
       const newOption = document.createElement('option');
