@@ -18,7 +18,7 @@ async function loadData() {
 }
 
 function getTicketsBySponsor(sponsorName) {
-  const tickets = ticketData.find((t) => t.sponsor_name === sponsorName && !t.linked);
+  const tickets = ticketData.filter((t) => t.sponsor_name === sponsorName && !t.linked);
 
   console.log("ticketData");
   console.log(ticketData);
