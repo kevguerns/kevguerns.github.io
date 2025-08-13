@@ -21,7 +21,7 @@ async function loadData() {
 }
 
 async function showGuestInfo(ticketNum) {
-  const res = await loadData();
+  loadData();
   const guest = ticketData.find(t => String(t.ticket_number) === String(ticketNum));
   if (guest) {
     currentTicket = guest.ticket_number;
@@ -52,15 +52,14 @@ async function showGuestInfo(ticketNum) {
       fetch(newURL)
       .then(() => {
         showBanner("Ticket checked in!");
-        loadData();
         showGuestInfo(guest.ticket_number);
       })
       .catch(err => console.error("Error checking in:", err));
-      res = loadData();
     };
   } else {
     alert("Ticket " + ticketNum + " not found.");
   }
+  res = await loadData();
   return res;
 }
 
