@@ -3,13 +3,13 @@ let ticketData = [];
 let currentTicket = null;
 
 // Load ticket data from Google Sheets
-function loadData() {
+async function loadData() {
   const checkInBtn = document.getElementById("check-in-btn");
 
   checkInBtn.disabled = true;
   showBanner("Loading data");
   console.log("Loading data.");
-  fetch(API_URL)
+  const res = await fetch(API_URL)
     .then(res => res.json())
     .then(data => {
       ticketData = data;
@@ -17,10 +17,11 @@ function loadData() {
   console.log("Data loaded.");
   showBanner("Data loaded.");
   checkInBtn.disabled = false;
+  return res;
 }
 
-function showGuestInfo(ticketNum) {
-  loadData();
+async function showGuestInfo(ticketNum) {
+  const res = await loadData();
   const guest = ticketData.find(t => String(t.ticket_number) === String(ticketNum));
   if (guest) {
     currentTicket = guest.ticket_number;
@@ -51,19 +52,28 @@ function showGuestInfo(ticketNum) {
       fetch(newURL)
       .then(() => {
         showBanner("Ticket checked in!");
-        loadData();
+        await loadData();
         showGuestInfo(guest.ticket_number);
       })
       .catch(err => console.error("Error checking in:", err));
-      loadData();
+      res = loadData();
     };
   } else {
     alert("Ticket " + ticketNum + " not found.");
   }
+  return res;
 }
 
-function qrCodeSuccessCallback(decodedText) {
-  showGuestInfo(decodedText.trim());
+async function qrCodeSuccessCallback(decodedText) {
+  html5QrcodeScanner.html5Qrcode.pause();
+
+  try {
+    await showGuestInfo(decodedText.trim());
+  } catch (err) {
+    console.error("Error during QR code processing:", err);
+  }
+
+  html5QrcodeScanner.html5Qrcode.resume();
 }
 
 function showBanner(message = "Ticket is being checked in!", duration = 3000) {
@@ -83,4 +93,4 @@ const html5QrcodeScanner = new Html5QrcodeScanner(
   "reader", { fps: 10, qrbox: 250 });
 html5QrcodeScanner.render(qrCodeSuccessCallback);
 
-loadData();
+await loadData();
