@@ -49,11 +49,11 @@ async function showGuestInfo(ticketNum) {
   if (!guest.linked) {
 
     currentTicket = guest.ticket_number;
-    const names = getTicketsBySponsor(guest.sponsor_name);
+    let names = getTicketsBySponsor(guest.sponsor_name);
 
     const select = document.getElementById("names");
 
-    const namesArray = Object.keys(names);
+    let namesArray = Object.keys(names);
     for (let i = 0; i < namesArray.length; i++) {
       name = namesArray[i];
 
