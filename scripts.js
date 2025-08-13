@@ -99,7 +99,7 @@ async function showGuestInfo(ticketNum) {
       document.getElementById("meal").textContent = selectedArr[3];
       statusEl.textContent = "No";
 
-      checkInBtn.diabled = false;
+      checkInBtn.disabled = false;
       checkInBtn.textContent = "Check In Guest";
 
       checkInBtn.onclick = async () => {
