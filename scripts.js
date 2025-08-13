@@ -56,7 +56,7 @@ async function showGuestInfo(ticketNum) {
         showGuestInfo(guest.ticket_number);
       })
       .catch(err => console.error("Error checking in:", err));
-      res = await loadData();
+      res = loadData();
     };
   } else {
     alert("Ticket " + ticketNum + " not found.");
