@@ -17,6 +17,17 @@ async function loadData() {
   return ticketData;
 }
 
+function getTicketsBySponsor(sponsorName) {
+  const tickets = ticketData.find(t => t.sponsor_name === sponsorName && !t.linked);
+  const nameDict = {};
+  for (ticket in tickets) {
+    const name = ticket.first_name + " " + ticket.last_name;
+    nameDict[name] = [ticket.ticket_number, ticket.table_num, ticket.paid_bool, ticket.meal_type];
+  }
+
+  return nameDict;
+}
+
 async function showGuestInfo(ticketNum) {
   await loadData();
   const guest = ticketData.find(t => String(t.ticket_number) === String(ticketNum));
@@ -24,40 +35,101 @@ async function showGuestInfo(ticketNum) {
     alert("Ticket " + ticketNum + " not found.");
     return;
   }
-  
-  currentTicket = guest.ticket_number;
-  document.getElementById("guest-info").classList.remove("hidden");
-  document.getElementById("name").textContent = guest.first_name + " " + guest.last_name;
-  document.getElementById("table").textContent = guest.table_num;
-  document.getElementById("paid").textContent = guest.paid_bool;
 
-  const statusEl = document.getElementById("checked-status");
-  const checkInBtn = document.getElementById("check-in-btn");
+  if (guest.linked) {
 
-  if (guest.checked_in === true) {
-    statusEl.textContent = "Yes";
-    statusEl.className = "checked";
-    checkInBtn.disabled = true;
-    checkInBtn.textContent = "Already Checked In";
-  } else {
-    statusEl.textContent = "No";
-    statusEl.className = "not-checked";
-    checkInBtn.disabled = false;
-    checkInBtn.textContent = "Check In Guest";
-  }
+    currentTicket = guest.ticket_number;
+    const names = getTicketsBySponsor(guest.sponsor_name);
+    const select = document.getElementById("names");
 
-  checkInBtn.onclick = async () => {
-    const newURL = API_URL + "?update=True&ticket_number=" + guest.ticket_number;
-    try {
-      showBanner("Checking in ticket...", "banner");
-      await fetch(newURL);
-      showBanner("Ticket checked in!", "banner2");
-      document.getElementById("checked-status").textContent = "Yes";
-      document.getElementById("check-in-btn").disabled = true;
-    } catch (err) {
-      console.error("Error checking in:", err);
+    for (name in Object.keys(names)) {
+      const newOption = document.createElement('option');
+      newOption.value = names[name][0];
+      newOption.text = name;
+      select.appendChild(newOption);
     }
-  };
+
+    document.getElementById("guest-info").classList.remove("hidden");
+    select.classList.remove("hidden");
+    document.getElementById("name").textContent = "";
+    document.getElementById("table").textContent = "";
+    document.getElementById("paid").textContent = "";
+    document.getElementById("meal").textContent = "";
+
+    const statusEl = document.getElementById("checked-status");
+    const checkInBtn = document.getElementById("check-in-btn");
+
+    statusEl.textContent = "";
+    checkInBtn.textContent = "Select a name";
+    checkInBtn.disabled = true;
+
+    select.addEventListener('change', function(event) {
+      const selectedValue = event.target.value;
+
+      document.getElementById("name").textContent = event.target.text;
+      document.getElementById("table").textContent = selectedValue[1];
+      document.getElementById("paid").textContent = selectedValue[2];
+      document.getElementById("meal").textContent = selectedValue[3];
+      statusEl.textContent = "No";
+
+      checkInBtn.diabled = false;
+      checkInBtn.textContent = "Check In Guest";
+
+      checkInBtn.onclick = async () => {
+        const newURL = API_URL + "?update=False&ticket_number=" + guest.ticket_number + "&swap=" + selectedValue[0];
+        try {
+          select.classList.add("hidden");
+          showBanner("Checking in ticket...", "banner2");
+          document.getElementById("check-in-btn").disabled = true;
+          await fetch(newURL);
+          showBanner("Ticket checked in!", "banner2");
+          document.getElementById("checked-status").textContent = "Yes";
+          document.getElementById("checked-status").textContent = "Already Checked In";
+        } catch (err) {
+          console.error("Error checking in:", err);
+        }
+      };
+    });
+
+  } else {
+  
+    currentTicket = guest.ticket_number;
+    document.getElementById("guest-info").classList.remove("hidden");
+    document.getElementById("name").textContent = guest.first_name + " " + guest.last_name;
+    document.getElementById("table").textContent = guest.table_num;
+    document.getElementById("paid").textContent = guest.paid_bool;
+    document.getElementById("meal").textContent = guest.meal_type;
+
+    const statusEl = document.getElementById("checked-status");
+    const checkInBtn = document.getElementById("check-in-btn");
+
+    if (guest.checked_in === true) {
+      statusEl.textContent = "Yes";
+      statusEl.className = "checked";
+      checkInBtn.disabled = true;
+      checkInBtn.textContent = "Already Checked In";
+    } else {
+      statusEl.textContent = "No";
+      statusEl.className = "not-checked";
+      checkInBtn.disabled = false;
+      checkInBtn.textContent = "Check In Guest";
+    }
+
+    checkInBtn.onclick = async () => {
+      const newURL = API_URL + "?update=True&ticket_number=" + guest.ticket_number;
+      try {
+        showBanner("Checking in ticket...", "banner2");
+        document.getElementById("check-in-btn").disabled = true;
+        await fetch(newURL);
+        showBanner("Ticket checked in!", "banner2");
+        document.getElementById("checked-status").textContent = "Yes";
+        document.getElementById("checked-status").textContent = "Already Checked In";
+      } catch (err) {
+        console.error("Error checking in:", err);
+      }
+    };
+
+  }
 }
 
 function showBanner(message = "Ticket is being checked in!", bannerId, duration = 3000) {
