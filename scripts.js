@@ -31,6 +31,13 @@ function getTicketsBySponsor(sponsorName) {
   return nameDict;
 }
 
+function removeOptions(element) {
+  var i, L = selectElement.options.length - 1;
+  for(i = L; i >= 0; i--) {
+      selectElement.remove(i);
+  }
+}
+
 async function showGuestInfo(ticketNum) {
   await loadData();
   const guest = ticketData.find(t => String(t.ticket_number) === String(ticketNum));
@@ -93,6 +100,7 @@ async function showGuestInfo(ticketNum) {
           await fetch(newURL);
           showBanner("Ticket checked in!", "banner2");
           document.getElementById("checked-status").textContent = "Yes";
+          removeOptions(document.getElementById("names"));
           checkInBtn.textContent = "Already Checked In";
         } catch (err) {
           console.error("Error checking in:", err);
