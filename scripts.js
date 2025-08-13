@@ -36,10 +36,17 @@ async function showGuestInfo(ticketNum) {
     return;
   }
 
-  if (guest.linked) {
+  console.log(guest.linked);
+
+  if (!guest.linked) {
+
+    console.log("GUEST IS NOT LINKED");
 
     currentTicket = guest.ticket_number;
     const names = getTicketsBySponsor(guest.sponsor_name);
+
+    console.log(names);
+
     const select = document.getElementById("names");
 
     for (name in Object.keys(names)) {
