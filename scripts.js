@@ -7,15 +7,15 @@ async function loadData() {
   const checkInBtn = document.getElementById("check-in-btn");
 
   checkInBtn.disabled = true;
-  showBanner("Loading data");
-  console.log("Loading data.");
+  showBanner("Loading data", "banner");
+  html5QrcodeScanner.html5Qrcode.pause();
   const res = await fetch(API_URL)
     .then(res => res.json())
     .then(data => {
       ticketData = data;
     });
-  console.log("Data loaded.");
-  showBanner("Data loaded.");
+  showBanner("Data loaded.", "banner");
+  html5QrcodeScanner.html5Qrcode.resume();
   checkInBtn.disabled = false;
   return res;
 }
@@ -51,7 +51,7 @@ async function showGuestInfo(ticketNum) {
       console.log(newURL);
       fetch(newURL)
       .then(() => {
-        showBanner("Ticket checked in!");
+        showBanner("Ticket checked in!", "banner2");
         showGuestInfo(guest.ticket_number);
       })
       .catch(err => console.error("Error checking in:", err));
@@ -75,8 +75,8 @@ async function qrCodeSuccessCallback(decodedText) {
   html5QrcodeScanner.html5Qrcode.resume();
 }
 
-function showBanner(message = "Ticket is being checked in!", duration = 3000) {
-  const banner = document.getElementById("banner");
+function showBanner(message = "Ticket is being checked in!", bannerId, duration = 3000) {
+  const banner = document.getElementById(banner);
   banner.textContent = message;
 
   banner.style.pointerEvents = "auto";
