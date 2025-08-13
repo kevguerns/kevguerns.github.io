@@ -24,7 +24,7 @@ function getTicketsBySponsor(sponsorName) {
   console.log("ticketData");
   console.log(ticketData);
   console.log("tickets");
-  console.log(tickets):
+  console.log(tickets);
   const nameDict = {};
   for (ticket in tickets) {
     const name = ticket.first_name + " " + ticket.last_name;
