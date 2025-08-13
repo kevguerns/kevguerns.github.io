@@ -67,7 +67,7 @@ async function showGuestInfo(ticketNum) {
       const newOption = document.createElement('option');
       console.log("names[name]");
       console.log(names[name]);
-      newOption.value = names[name][0];
+      newOption.value = names[name];
       newOption.text = name;
       select.appendChild(newOption);
     }
@@ -87,7 +87,8 @@ async function showGuestInfo(ticketNum) {
     checkInBtn.disabled = true;
 
     select.addEventListener('change', function(event) {
-      const selectedValue = event.target.value;
+      let selectedValue = event.target.value; //selected ticket number
+      print(selectedValue);
 
       document.getElementById("name").textContent = event.target.text;
       document.getElementById("table").textContent = selectedValue[1];
