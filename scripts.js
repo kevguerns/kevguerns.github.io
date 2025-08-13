@@ -33,7 +33,7 @@ function getTicketsBySponsor(sponsorName) {
 
 function removeOptions(element) {
   var i, L = element.options.length - 1;
-  for(i = L; i >= 0; i--) {
+  for(i = L; i > 0; i--) {
       element.remove(i);
   }
 }
