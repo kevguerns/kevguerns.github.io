@@ -21,7 +21,7 @@ function getTicketsBySponsor(sponsorName) {
   let tickets = [];
   tickets = ticketData.filter((t) => t.sponsor_name === sponsorName && !t.linked);
 
-  const nameDict = {};
+  let nameDict = {};
   for (let i = 0; i < tickets.length; i++) {
     let ticket = tickets[i];
     const name = ticket.first_name + " " + ticket.last_name;
