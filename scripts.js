@@ -52,11 +52,11 @@ async function showGuestInfo(ticketNum) {
       fetch(newURL)
       .then(() => {
         showBanner("Ticket checked in!");
-        await loadData();
+        loadData();
         showGuestInfo(guest.ticket_number);
       })
       .catch(err => console.error("Error checking in:", err));
-      res = loadData();
+      res = await loadData();
     };
   } else {
     alert("Ticket " + ticketNum + " not found.");
