@@ -28,7 +28,7 @@ function getTicketsBySponsor(sponsorName) {
   for (let i = 0; i < tickets.length; i++) {
     let ticket = tickets[i];
     const name = ticket.first_name + " " + ticket.last_name;
-    nameDict[name] = [ticket.ticket_number, ticket.table_num, ticket.paid_bool, ticket.meal_type];
+    nameDict[name] = [ticket.ticket_number, ticket.table_num, ticket.paid_bool, ticket.meal_type, name];
     console.log(name);
     console.log(nameDict[name]);
   }
@@ -93,7 +93,7 @@ async function showGuestInfo(ticketNum) {
 
       let selectedArr = selectedValue.split(",");
 
-      document.getElementById("name").textContent = event.target.text;
+      document.getElementById("name").textContent = selectedArr[4];
       document.getElementById("table").textContent = selectedArr[1];
       document.getElementById("paid").textContent = selectedArr[2];
       document.getElementById("meal").textContent = selectedArr[3];
@@ -104,6 +104,7 @@ async function showGuestInfo(ticketNum) {
 
       checkInBtn.onclick = async () => {
         const newURL = API_URL + "?update=False&ticket_number=" + guest.ticket_number + "&swap=" + selectedArr[0];
+        console.log(newURL);
         try {
           select.classList.add("hidden");
           showBanner("Checking in ticket...", "banner2");
@@ -111,7 +112,7 @@ async function showGuestInfo(ticketNum) {
           await fetch(newURL);
           showBanner("Ticket checked in!", "banner2");
           document.getElementById("checked-status").textContent = "Yes";
-          document.getElementById("checked-status").textContent = "Already Checked In";
+          checkInBtn.textContent = "Already Checked In";
         } catch (err) {
           console.error("Error checking in:", err);
         }
