@@ -18,23 +18,16 @@ async function loadData() {
 }
 
 function getTicketsBySponsor(sponsorName) {
-  const tickets = ticketData.filter((t) => t.sponsor_name === sponsorName && !t.linked);
+  let tickets = [];
+  tickets = ticketData.filter((t) => t.sponsor_name === sponsorName && !t.linked);
 
-  console.log("ticketData");
-  console.log(ticketData);
-  console.log("tickets");
-  console.log(tickets);
   const nameDict = {};
   for (let i = 0; i < tickets.length; i++) {
     let ticket = tickets[i];
     const name = ticket.first_name + " " + ticket.last_name;
     nameDict[name] = [ticket.ticket_number, ticket.table_num, ticket.paid_bool, ticket.meal_type, name];
-    console.log(name);
-    console.log(nameDict[name]);
   }
 
-  console.log("nameDict");
-  console.log(nameDict);
   return nameDict;
 }
 
@@ -46,27 +39,18 @@ async function showGuestInfo(ticketNum) {
     return;
   }
 
-  console.log(guest.linked);
-
   if (!guest.linked) {
-
-    console.log("GUEST IS NOT LINKED");
 
     currentTicket = guest.ticket_number;
     const names = getTicketsBySponsor(guest.sponsor_name);
 
-    console.log(names);
-
     const select = document.getElementById("names");
 
-    console.log("for names");
     const namesArray = Object.keys(names);
     for (let i = 0; i < namesArray.length; i++) {
       name = namesArray[i];
-      console.log(name);
+
       const newOption = document.createElement('option');
-      console.log("names[name]");
-      console.log(names[name]);
       newOption.value = names[name];
       newOption.text = name;
       select.appendChild(newOption);
@@ -88,8 +72,6 @@ async function showGuestInfo(ticketNum) {
 
     select.addEventListener('change', function(event) {
       let selectedValue = event.target.value; //selected ticket number
-      console.log("selectedValue");
-      console.log(selectedValue);
 
       let selectedArr = selectedValue.split(",");
 
@@ -104,7 +86,6 @@ async function showGuestInfo(ticketNum) {
 
       checkInBtn.onclick = async () => {
         const newURL = API_URL + "?update=False&ticket_number=" + guest.ticket_number + "&swap=" + selectedArr[0];
-        console.log(newURL);
         try {
           select.classList.add("hidden");
           showBanner("Checking in ticket...", "banner2");
