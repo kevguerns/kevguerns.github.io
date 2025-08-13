@@ -1,0 +1,27 @@
+body { 
+    font-family: sans-serif; 
+    padding: 20px; 
+    background: #ded8be; 
+}
+
+.info-box { 
+    margin-top: 20px; 
+    padding: 15px; 
+    border-radius: 8px; 
+    background: #ce8525; 
+    box-shadow: 0 0 5px rgba(0,0,0,0.1); 
+}
+    
+.hidden { 
+    display: none; 
+}
+    
+#reader { 
+    margin: auto; 
+}
+
+.libre-baskerville-regular-italic {
+  font-family: "Libre Baskerville", serif;
+  font-weight: 400;
+  font-style: italic;
+}
