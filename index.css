@@ -31,7 +31,7 @@ h1 {
     text-align: center;
 }
 
-#banner {
+.banner {
     position: fixed;
     top: 0;
     left: 0;
