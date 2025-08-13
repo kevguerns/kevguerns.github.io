@@ -88,7 +88,8 @@ async function showGuestInfo(ticketNum) {
 
     select.addEventListener('change', function(event) {
       let selectedValue = event.target.value; //selected ticket number
-      print(selectedValue);
+      console.log("selectedValue");
+      console.log(selectedValue);
 
       document.getElementById("name").textContent = event.target.text;
       document.getElementById("table").textContent = selectedValue[1];
