@@ -52,8 +52,8 @@ async function showGuestInfo(ticketNum) {
       showBanner("Checking in ticket...", "banner");
       await fetch(newURL);
       showBanner("Ticket checked in!", "banner2");
-      await loadData();
-      await showGuestInfo(guest.ticket_number);
+      document.getElementById("checked-status").textContent = "Yes";
+      document.getElementById("check-in-btn").disabled = true;
     } catch (err) {
       console.error("Error checking in:", err);
     }
@@ -87,5 +87,3 @@ async function qrCodeSuccessCallback(decodedText) {
 
 const html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
 html5QrcodeScanner.render(qrCodeSuccessCallback);
-
-loadData();
