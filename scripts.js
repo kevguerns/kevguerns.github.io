@@ -62,6 +62,19 @@ async function showGuestInfo(ticketNum) {
   };
 }
 
+function showBanner(message = "Ticket is being checked in!", bannerId, duration = 3000) {
+  const banner = document.getElementById(bannerId);
+  banner.textContent = message;
+
+  banner.style.pointerEvents = "auto";
+  banner.style.opacity = "1";
+
+  setTimeout(() => {
+    banner.style.opacity = "0";
+    banner.style.pointerEvents = "none";
+  }, duration);
+}
+
 async function qrCodeSuccessCallback(decodedText) {
   await html5QrcodeScanner.html5Qrcode.pause();
 
