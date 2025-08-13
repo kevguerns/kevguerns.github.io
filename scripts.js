@@ -32,9 +32,9 @@ function getTicketsBySponsor(sponsorName) {
 }
 
 function removeOptions(element) {
-  var i, L = selectElement.options.length - 1;
+  var i, L = element.options.length - 1;
   for(i = L; i >= 0; i--) {
-      selectElement.remove(i);
+      element.remove(i);
   }
 }
 
