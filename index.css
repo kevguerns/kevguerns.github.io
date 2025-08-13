@@ -25,3 +25,28 @@ body {
   font-weight: 400;
   font-style: italic;
 }
+
+h1 {
+    margin: auto;
+    text-align: center;
+}
+
+#banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 12px;
+    font-weight: bold;
+    z-index: 9999;
+
+    /* Initially hidden and transparent */
+    opacity: 0;
+    pointer-events: none;
+
+    /* Smooth opacity transition */
+    transition: opacity 0.5s ease;
+}
