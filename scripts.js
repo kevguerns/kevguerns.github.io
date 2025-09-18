@@ -128,6 +128,7 @@ async function showGuestInfo(ticketNum) {
       statusEl.textContent = "Yes";
       statusEl.className = "checked";
       checkInBtn.disabled = true;
+      showBanner("Guest is already checked in!", "banner2", 3000, "darkgreen");
       checkInBtn.textContent = "Already Checked In";
     } else {
       statusEl.textContent = "No";
