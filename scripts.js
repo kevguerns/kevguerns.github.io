@@ -94,14 +94,18 @@ async function showGuestInfo(ticketNum) {
       checkInBtn.onclick = async () => {
         const newURL = API_URL + "?update=False&ticket_number=" + guest.ticket_number + "&swap=" + selectedArr[0];
         try {
-          select.classList.add("hidden");
-          showBanner("Checking in ticket...", "banner2");
-          document.getElementById("check-in-btn").disabled = true;
-          await fetch(newURL);
-          showBanner("Ticket checked in!", "banner2");
-          document.getElementById("checked-status").textContent = "Yes";
-          removeOptions(document.getElementById("names"));
-          checkInBtn.textContent = "Already Checked In";
+          if (document.getElementById("paid").textContent == "No") {
+            showBanner("Ticket not paid!", "banner2");
+          } else {
+            select.classList.add("hidden");
+            showBanner("Checking in ticket...", "banner2");
+            document.getElementById("check-in-btn").disabled = true;
+            await fetch(newURL);
+            showBanner("Ticket checked in!", "banner2");
+            document.getElementById("checked-status").textContent = "Yes";
+            removeOptions(document.getElementById("names"));
+            checkInBtn.textContent = "Already Checked In";
+          }
         } catch (err) {
           console.error("Error checking in:", err);
         }
@@ -149,10 +153,11 @@ async function showGuestInfo(ticketNum) {
   }
 }
 
-function showBanner(message = "Ticket is being checked in!", bannerId, duration = 3000) {
+function showBanner(message = "Ticket is being checked in!", bannerId, duration = 3000, color = "green") {
   const banner = document.getElementById(bannerId);
   banner.textContent = message;
-
+  
+  banner.style.backgroundColor = color;
   banner.style.pointerEvents = "auto";
   banner.style.opacity = "1";
 

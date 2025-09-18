@@ -5,7 +5,8 @@ body {
 }
 
 .info-box { 
-    margin-top: 20px; 
+    padding-top: 20px;
+    margin-top: 20px;
     padding: 15px; 
     border-radius: 8px; 
     background: #ce8525; 
