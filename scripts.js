@@ -139,12 +139,17 @@ async function showGuestInfo(ticketNum) {
     checkInBtn.onclick = async () => {
       const newURL = API_URL + "?update=True&ticket_number=" + guest.ticket_number;
       try {
-        showBanner("Checking in ticket...", "banner2");
-        document.getElementById("check-in-btn").disabled = true;
-        await fetch(newURL);
-        showBanner("Ticket checked in!", "banner2");
-        document.getElementById("checked-status").textContent = "Yes";
-        document.getElementById("checked-status").textContent = "Already Checked In";
+        if (document.getElementById("paid").textContent != "Yes") {
+            showBanner("Ticket not paid!", "banner2", 3000, "darkred");
+          } 
+        else {
+          showBanner("Checking in ticket...", "banner2");
+          document.getElementById("check-in-btn").disabled = true;
+          await fetch(newURL);
+          showBanner("Ticket checked in!", "banner2");
+          document.getElementById("checked-status").textContent = "Yes";
+          document.getElementById("checked-status").textContent = "Already Checked In";
+        }
       } catch (err) {
         console.error("Error checking in:", err);
       }
