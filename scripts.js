@@ -94,8 +94,8 @@ async function showGuestInfo(ticketNum) {
       checkInBtn.onclick = async () => {
         const newURL = API_URL + "?update=False&ticket_number=" + guest.ticket_number + "&swap=" + selectedArr[0];
         try {
-          if (document.getElementById("paid").textContent == "No") {
-            showBanner("Ticket not paid!", "banner2");
+          if (document.getElementById("paid").textContent != "Yes") {
+            showBanner("Ticket not paid!", "banner2", 3000, "darkred");
           } else {
             select.classList.add("hidden");
             showBanner("Checking in ticket...", "banner2");
